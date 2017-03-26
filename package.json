@@ -1,0 +1,25 @@
+{
+  "name": "miner",
+  "version": "1.0.0",
+  "description": "A command line utility to, create, manage, backup minecraft servers using docker and tmux.",
+  "main": "index.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Skarlso/miner.git"
+  },
+  "keywords": [
+    "minecraft",
+    "aws",
+    "docker",
+    "tmux"
+  ],
+  "author": "Gergely Brautigam",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Skarlso/miner/issues"
+  },
+  "homepage": "https://github.com/Skarlso/miner#readme"
+}
