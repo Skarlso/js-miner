@@ -5,8 +5,6 @@ var chalk = require('chalk');
 var dHelper = require('./docker.js');
 var tmux = require('./tmux.js');
 
-
-// TODO: Extract this to setup, as starting the server should not care what version was setup.
 cmd
   .option('-m, --minecraft-version', 'Version to use. if not provided, latest is used.')
   .parse(process.argv);

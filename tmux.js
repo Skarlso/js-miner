@@ -14,4 +14,19 @@ Tmux.prototype.run = function(container) {
     });
 };
 
+Tmux.prototype.attachAndStop = function() {
+    exec("tmux send -t minecraft stop ENTER", (error, stdout, stderr) => {
+        if (error) {
+            console.error(`exec error: ${error}`);
+            return;
+        }
+        console.log(`stdout: ${stdout}`);
+        console.log(`stderr: ${stderr}`);
+    });
+};
+
+Tmux.prototype.attach = function() {
+
+};
+
 module.exports = new Tmux();
