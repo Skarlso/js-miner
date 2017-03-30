@@ -6,10 +6,10 @@ var dHelper = require('./docker.js');
 var tmux = require('./tmux.js');
 
 cmd
-  .option('-m, --minecraft-version', 'Version to use. if not provided, latest is used.')
+  .option('-m, --minecraft-version [VERSION]', 'Version to use. if not provided, latest is used.')
   .parse(process.argv);
 
-var version = cmd.minecraft_version || 'latest';
+var version = cmd.minecraftVersion || 'latest';
 
 console.log('Starting server with version: %s', chalk.bold(chalk.white(version)));
 container = dHelper.getMinecraftContainer();
