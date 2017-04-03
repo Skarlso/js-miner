@@ -2,10 +2,8 @@
 console.log('Stopping server.');
 
 var dHelper = require('./docker.js');
-var tmux = require('./tmux.js');
 var chalk = require('chalk');
 
-tmux.attachAndStop();
 container = dHelper.getMinecraftContainer();
 container.inspect().then(function (con) {
     console.log('Looking for container with name: ' + con.Name);

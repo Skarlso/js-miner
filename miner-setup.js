@@ -10,19 +10,10 @@ var config = require('./config.js');
 
 cmd
     .option('-m, --minecraft-version [VERSION]', 'Version to use. if not provided, latest is used.')
+    .option('-n, --minecraft-name [NAME]', 'Name of the server. Usually the map it hosts for easy identification.')
     .parse(process.argv);
 
 var version = cmd.minecraftVersion || 'latest';
-
-console.log('Setting up minecraft server with version %s', chalk.bold(chalk.white(version)));
-dHelper.pullMinecraftImageVersion(version);
-console.log('Creating container.');
-process.exit(1);
-// var pull = dHelper.pullMinecraftImageVersion(version);
-// pull.then(function(result) {
-//     console.log('Done pulling.');
-//     console.log('Create container out of the pulled image with name: %s', chalk.green(config.containerName));
-// }).catch(function(err) {
-//     console.log(err);
-// });
-
+var name = cmd.minecraftName || config.defaultName;
+console.log('Setting up minecraft server with version %s and name %s', chalk.bold(chalk.white(version)), chalk.bold(chalk.green(name)));
+dHelper.setup(name, version);
