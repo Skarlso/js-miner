@@ -11,16 +11,16 @@ var DockerHelper = function() {};
 DockerHelper.prototype.getMinecraftContainer = function(name) {
     var opts = {
         "limit": 1,
-        "filters": '{"label": ["world:\''+ name +'\']}'
+        "filters": '{"label": ["world='+ name +'"]}'
     };
     return new Promise(function(resolve, reject) {
-        docker.listContainers({}, function(err, containers) {
-            if (containers.length > 0) {
+        docker.listContainers(opts, function(err, containers) {
+            if (containers !== null && containers.length > 0) {
                 var contName = containers[0].Names[0].replace('/', '');
-                console.log("Found container labeled with %s. Container name is: %s", name, contName);
+                console.log("Found container labeled with %s. Container name is: %s", chalk.bold(chalk.white(name)), chalk.bold(chalk.green(contName)));
                 resolve(docker.getContainer(contName));
             } else {
-                reject(new Error("No containers tagged with "+name+" found."));
+                reject(new Error("No containers tagged with "+ chalk.bold(chalk.white(name)) +" found."));
             }
         });
     });
@@ -51,15 +51,48 @@ DockerHelper.prototype.setup = function(name, version) {
 
 DockerHelper.prototype.attachToServer = function(name) {
     this.getMinecraftContainer(name).then(function (container) {
-        container.attach({stream: true, stdout: true, stderr: true}, function (err, stream) {
+        var attach_opts = {stream: true, stdin: true, stdout: true, stderr: true}
+        container.attach(attach_opts, function (err, stream) {
+            // stream.pipe(process.stdout);
             stream.pipe(process.stdout);
+
+            // Connect stdin
+            var isRaw = process.isRaw;
+            process.stdin.resume();
+            process.stdin.setRawMode(true);
+            process.stdin.pipe(stream);
+
+          container.wait(function(err, data) {
+              process.stdin.setRawMode(isRaw);
+              process.stdin.resume();
+              stream.end();
+              process.exit();
+          });
         });
     }).catch(function (err) {
         console.log(err);
     });
 };
 
-DockerHelper.prototype.startContainer = function(name) {
+DockerHelper.prototype.stopServer = function(name) {
+    this.getMinecraftContainer(name).then(function (container) {
+        container.stop(function (err, data) {
+            if (err) {
+                if (err.reason === 'container already stopped') {
+                    console.log("Server not running.");
+                } else {
+                    console.log(err.reason);
+                }
+            } else {
+                console.log("Server stopped.");
+            }
+        });
+    }).catch(function (err) {
+        console.log(err);
+    });
+};
+
+DockerHelper.prototype.startServer = function(name) {
     // docker run -itd skarlso/minecraft:1.9 bash -c 'echo "eula=true" > eula.txt ; java -jar /minecraft/craftbukkit.jar nogui'
     // Get version for server. // -> load the file with the name of the server + .version. Which will contain the version.
     var version = ver.getServerVersion(name);
@@ -70,9 +103,9 @@ DockerHelper.prototype.startContainer = function(name) {
         Image: 'skarlso/minecraft:' + version,
         AttachStdin: true,
         AttachStdout: true,
-        AttachStderr: true,
+        AttachStderr: false,
         Tty: true,
-        OpenStdin: false,
+        OpenStdin: true,
         StdinOnce: false,
         WorkingDir: '/data',
         Labels: {
@@ -93,15 +126,6 @@ DockerHelper.prototype.startContainer = function(name) {
     }).catch(function(err) {
         console.log(err);
     });
-    //promise
-    // docker.run('skarlso/minecraft:' + version, ['bash', '-c', 'uname -a'], process.stdout).then(function(container) {
-    //     console.log(container.output.StatusCode);
-    //     return container.remove();
-    // }).then(function(data) {
-    //     console.log('container removed');
-    // }).catch(function(err) {
-    //     console.log(err);
-    // });    
 };
 
 module.exports = new DockerHelper();

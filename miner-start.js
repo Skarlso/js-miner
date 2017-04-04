@@ -12,7 +12,7 @@ cmd
 var name = cmd.minecraftName || 'miner_server';
 
 console.log('Starting %s.', chalk.bold(chalk.white(name)));
-dHelper.startContainer(name);
+dHelper.startServer(name);
 // container = dHelper.getMinecraftContainer();
 // container.inspect().then(function (con) {
 //     console.log('Looking for container with name: ' + con.Name);
