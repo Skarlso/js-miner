@@ -3,12 +3,27 @@ var config = require('./config.js');
 var chalk = require('chalk');
 var Spinner = require('cli-spinner').Spinner;
 var ver = require('./version.js');
+var Promise = require('bluebird');
 
 var docker = new Docker();
 var DockerHelper = function() {};
 
-DockerHelper.prototype.getMinecraftContainer = function() {
-    return docker.getContainer(config.defaultName);
+DockerHelper.prototype.getMinecraftContainer = function(name) {
+    var opts = {
+        "limit": 1,
+        "filters": '{"label": ["world:\''+ name +'\']}'
+    };
+    return new Promise(function(resolve, reject) {
+        docker.listContainers({}, function(err, containers) {
+            if (containers.length > 0) {
+                var contName = containers[0].Names[0].replace('/', '');
+                console.log("Found container labeled with %s. Container name is: %s", name, contName);
+                resolve(docker.getContainer(contName));
+            } else {
+                reject(new Error("No containers tagged with "+name+" found."));
+            }
+        });
+    });
 };
 
 DockerHelper.prototype.setup = function(name, version) {
@@ -34,10 +49,13 @@ DockerHelper.prototype.setup = function(name, version) {
     });
 };
 
-DockerHelper.prototype.attachToContainer = function() {
-    var container = this.getMinecraftContainer();
-    container.attach({stream: true, stdout: true, stderr: true}, function (err, stream) {
-        stream.pipe(process.stdout);
+DockerHelper.prototype.attachToServer = function(name) {
+    this.getMinecraftContainer(name).then(function (container) {
+        container.attach({stream: true, stdout: true, stderr: true}, function (err, stream) {
+            stream.pipe(process.stdout);
+        });
+    }).catch(function (err) {
+        console.log(err);
     });
 };
 
@@ -45,31 +63,45 @@ DockerHelper.prototype.startContainer = function(name) {
     // docker run -itd skarlso/minecraft:1.9 bash -c 'echo "eula=true" > eula.txt ; java -jar /minecraft/craftbukkit.jar nogui'
     // Get version for server. // -> load the file with the name of the server + .version. Which will contain the version.
     var version = ver.getServerVersion(name);
+    var bindDir = config.bindBase + name + ':/data';
     console.log('Server is currently running on version: %s', chalk.bold(chalk.green(version)));
+    console.log('Binding to world location: ', chalk.bold(chalk.green(bindDir)));
     docker.createContainer({
         Image: 'skarlso/minecraft:' + version,
         AttachStdin: true,
-        AttachStdout: false,
-        AttachStderr: false,
+        AttachStdout: true,
+        AttachStderr: true,
         Tty: true,
         OpenStdin: false,
         StdinOnce: false,
+        WorkingDir: '/data',
+        Labels: {
+            'world':name
+        },
         'Volumes': {
             '/data': {}
         },
         'Hostconfig': {
             'Binds': [config.bindBase + name + ':/data']
         },
-        Cmd: ["echo \"eula=true\" > eula.txt", "java -jar /minecraft/craftbukkit.jar nogui"],
-        name: name,
+        Cmd: ["bash", "-c", "echo \"eula=true\" > eula.txt ; java -jar /minecraft/craftbukkit.jar nogui"],
         HostConfig: {
             PortBindings: {'25565/tcp': [{ 'HostPort': '25565' }] }
         }
     }).then(function(container) {
-        container.start();
+        return container.start();
     }).catch(function(err) {
         console.log(err);
     });
+    //promise
+    // docker.run('skarlso/minecraft:' + version, ['bash', '-c', 'uname -a'], process.stdout).then(function(container) {
+    //     console.log(container.output.StatusCode);
+    //     return container.remove();
+    // }).then(function(data) {
+    //     console.log('container removed');
+    // }).catch(function(err) {
+    //     console.log(err);
+    // });    
 };
 
 module.exports = new DockerHelper();
