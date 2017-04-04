@@ -11,8 +11,7 @@ var DockerHelper = function() {};
 DockerHelper.prototype.getMinecraftContainer = function(name) {
     var opts = {
         "limit": 1,
-        "filters": '{"label": ["world='+ name +'"]}',
-        "Status" : "running"
+        "filters": '{"label": ["world='+ name +'"]}'
     };
     return new Promise(function(resolve, reject) {
         docker.listContainers(opts, function(err, containers) {
@@ -50,25 +49,20 @@ DockerHelper.prototype.setup = function(name, version) {
     });
 };
 
+// TODO: This doesn't work properly yet. If I use the Connect stdin bit, it will not be able to
+// detach from that hijack.
 DockerHelper.prototype.attachToServer = function(name) {
     this.getMinecraftContainer(name).then(function (container) {
-        var attach_opts = {stream: true, stdin: true, stdout: true, stderr: true}
+        var attach_opts = {stream: true, stdin: true, stdout: true, stderr: true};
+        // var opts = {'Detach': true, 'Tty': true, stream: true, stdin: true, stdout: true, stderr: true};
         container.attach(attach_opts, function (err, stream) {
             // stream.pipe(process.stdout);
             stream.pipe(process.stdout);
-
-            // Connect stdin
-            var isRaw = process.isRaw;
-            process.stdin.resume();
-            process.stdin.setRawMode(true);
-            process.stdin.pipe(stream);
-
-        //   container.wait(function(err, data) {
-        //       process.stdin.setRawMode(isRaw);
-        //       process.stdin.resume();
-        //       stream.end();
-        //       process.exit();
-        //   });
+            // // Connect stdin
+            // var isRaw = process.isRaw;
+            // process.stdin.resume();
+            // process.stdin.setRawMode(true);
+            // process.stdin.pipe(stream);
         });
     }).catch(function (err) {
         console.log(err);
@@ -77,16 +71,10 @@ DockerHelper.prototype.attachToServer = function(name) {
 
 DockerHelper.prototype.stopServer = function(name) {
     this.getMinecraftContainer(name).then(function (container) {
-        container.stop(function (err, data) {
-            if (err) {
-                if (err.reason === 'container already stopped') {
-                    console.log("Server not running.");
-                } else {
-                    console.log(err.reason);
-                }
-            } else {
-                console.log("Server stopped.");
-            }
+        var attach_opts = {stream: true, stdin: true, stdout: true, stderr: true};
+        container.attach(attach_opts, function (err, stream) {
+            stream.pipe(process.stdout);
+            stream.write('stop\n');
         });
     }).catch(function (err) {
         console.log(err);
