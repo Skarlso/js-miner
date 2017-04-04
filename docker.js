@@ -11,7 +11,8 @@ var DockerHelper = function() {};
 DockerHelper.prototype.getMinecraftContainer = function(name) {
     var opts = {
         "limit": 1,
-        "filters": '{"label": ["world='+ name +'"]}'
+        "filters": '{"label": ["world='+ name +'"]}',
+        "Status" : "running"
     };
     return new Promise(function(resolve, reject) {
         docker.listContainers(opts, function(err, containers) {
@@ -62,12 +63,12 @@ DockerHelper.prototype.attachToServer = function(name) {
             process.stdin.setRawMode(true);
             process.stdin.pipe(stream);
 
-          container.wait(function(err, data) {
-              process.stdin.setRawMode(isRaw);
-              process.stdin.resume();
-              stream.end();
-              process.exit();
-          });
+        //   container.wait(function(err, data) {
+        //       process.stdin.setRawMode(isRaw);
+        //       process.stdin.resume();
+        //       stream.end();
+        //       process.exit();
+        //   });
         });
     }).catch(function (err) {
         console.log(err);
