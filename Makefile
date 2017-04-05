@@ -6,7 +6,7 @@ test:
 	@NODE_ENV=test ./node_modules/.bin/mocha --recursive --reporter $(REPORTER) --timeout 3000
 
 jshint:
-	jshint lib examples test index.js
+	jshint lib examples test js-miner.js
 
 tests: test
 
@@ -18,7 +18,7 @@ unit:
 
 skel:
 	mkdir examples lib test
-	touch index.js
+	touch js-miner.js
 	npm install mocha chai --save-dev
 
 .PHONY: test tap unit jshint skel

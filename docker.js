@@ -11,7 +11,7 @@ var DockerHelper = function() {};
 DockerHelper.prototype.getMinecraftContainer = function(name) {
     var opts = {
         "limit": 1,
-        "filters": '{"label": ["world='+ name +'"]}'
+        "filters": '{"label": ["world='+ name +'"], "status": ["running"]}',
     };
     return new Promise(function(resolve, reject) {
         docker.listContainers(opts, function(err, containers) {

@@ -1,14 +1,14 @@
 {
-  "name": "miner",
+  "name": "js-miner",
   "version": "1.0.0",
-  "description": "A command line utility to, create, manage, backup minecraft servers using docker and tmux.",
-  "main": "miner.js",
+  "description": "A command line utility to, create, manage, backup minecraft servers using docker.",
+  "main": "js-miner.js",
   "scripts": {
     "test": "make test"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/Skarlso/miner.git"
+    "url": "git+ssh://git@github.com/Skarlso/js-miner.git"
   },
   "keywords": [
     "minecraft",
@@ -17,10 +17,13 @@
   ],
   "author": "Gergely Brautigam",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Skarlso/miner/issues"
+  "bin": {
+    "js-miner": "js-miner.js"
   },
-  "homepage": "https://github.com/Skarlso/miner#readme",
+  "bugs": {
+    "url": "https://github.com/Skarlso/js-miner/issues"
+  },
+  "homepage": "https://github.com/Skarlso/js-miner#readme",
   "dependencies": {
     "archiver": "^1.3.0",
     "aws-sdk": "^2.38.0",
