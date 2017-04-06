@@ -1,11 +1,11 @@
-var Docker = require('dockerode');
-var config = require('./config.js');
-var chalk = require('chalk');
-var Spinner = require('cli-spinner').Spinner;
-var ver = require('./version.js');
-var Promise = require('bluebird');
+/*jshint esversion: 6 */
 
-var docker = new Docker();
+const Docker = require('dockerode');
+const config = require('./config.js');
+const chalk = require('chalk');
+const Spinner = require('cli-spinner').Spinner;
+const ver = require('./version.js');
+const docker = new Docker();
 var DockerHelper = function() {};
 
 DockerHelper.prototype.getMinecraftContainer = function(name) {
@@ -13,10 +13,10 @@ DockerHelper.prototype.getMinecraftContainer = function(name) {
         "limit": 1,
         "filters": '{"label": ["world='+ name +'"], "status": ["running"]}',
     };
-    return new Promise(function(resolve, reject) {
-        docker.listContainers(opts, function(err, containers) {
+    return new Promise((resolve, reject) => {
+        docker.listContainers(opts, (err, containers) => {
             if (containers !== null && containers.length > 0) {
-                var contName = containers[0].Names[0].replace('/', '');
+                let contName = containers[0].Names[0].replace('/', '');
                 console.log("Found container labeled with %s. Container name is: %s", chalk.bold(chalk.white(name)), chalk.bold(chalk.green(contName)));
                 resolve(docker.getContainer(contName));
             } else {
@@ -31,7 +31,7 @@ DockerHelper.prototype.setup = function(name, version) {
     var spinner = new Spinner('Pulling minecraft image... %s');
     spinner.setSpinnerString('|/-\\');
     spinner.start();
-    docker.pull(config.repoTag + version, function(err, stream) {
+    docker.pull(config.repoTag + version, (err, stream) => {
         docker.modem.followProgress(stream, onFinished, onProgress);
 
         function onFinished(err, output) {
@@ -52,10 +52,10 @@ DockerHelper.prototype.setup = function(name, version) {
 // TODO: This doesn't work properly yet. If I use the Connect stdin bit, it will not be able to
 // detach from that hijack.
 DockerHelper.prototype.attachToServer = function(name) {
-    this.getMinecraftContainer(name).then(function (container) {
-        var attach_opts = {stream: true, stdin: true, stdout: true, stderr: true};
+    this.getMinecraftContainer(name).then((container) => {
+        let attach_opts = {stream: true, stdin: true, stdout: true, stderr: true};
         // var opts = {'Detach': true, 'Tty': true, stream: true, stdin: true, stdout: true, stderr: true};
-        container.attach(attach_opts, function (err, stream) {
+        container.attach(attach_opts, (err, stream) => {
             // stream.pipe(process.stdout);
             stream.pipe(process.stdout);
             // // Connect stdin
@@ -64,28 +64,26 @@ DockerHelper.prototype.attachToServer = function(name) {
             // process.stdin.setRawMode(true);
             // process.stdin.pipe(stream);
         });
-    }).catch(function (err) {
+    }).catch((err) => {
         console.log(err);
     });
 };
 
-DockerHelper.prototype.stopServer = function(name) {
-    this.getMinecraftContainer(name).then(function (container) {
-        var attach_opts = {stream: true, stdin: true, stdout: true, stderr: true};
-        container.attach(attach_opts, function (err, stream) {
+DockerHelper.prototype.stopServer = function (name) {
+    this.getMinecraftContainer(name).then((container) => {
+        let attach_opts = {stream: true, stdin: true, stdout: true, stderr: true};
+        container.attach(attach_opts, (err, stream) => {
             stream.pipe(process.stdout);
             stream.write('stop\n');
         });
-    }).catch(function (err) {
+    }).catch((err) => {
         console.log(err);
     });
 };
 
 DockerHelper.prototype.startServer = function(name) {
-    // docker run -itd skarlso/minecraft:1.9 bash -c 'echo "eula=true" > eula.txt ; java -jar /minecraft/craftbukkit.jar nogui'
-    // Get version for server. // -> load the file with the name of the server + .version. Which will contain the version.
-    var version = ver.getServerVersion(name);
-    var bindDir = config.bindBase + name + ':/data';
+    let version = ver.getServerVersion(name);
+    let bindDir = config.bindBase + name + ':/data';
     console.log('Server is currently running on version: %s', chalk.bold(chalk.green(version)));
     console.log('Binding to world location: ', chalk.bold(chalk.green(bindDir)));
     docker.createContainer({
@@ -110,9 +108,9 @@ DockerHelper.prototype.startServer = function(name) {
         HostConfig: {
             PortBindings: {'25565/tcp': [{ 'HostPort': '25565' }] }
         }
-    }).then(function(container) {
+    }).then((container) => {
         return container.start();
-    }).catch(function(err) {
+    }).catch((err) => {
         console.log(err);
     });
 };
