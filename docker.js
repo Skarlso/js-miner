@@ -20,7 +20,7 @@ DockerHelper.prototype.getMinecraftContainer = function(name) {
                 console.log("Found container labeled with %s. Container name is: %s", chalk.bold(chalk.white(name)), chalk.bold(chalk.green(contName)));
                 resolve(docker.getContainer(contName));
             } else {
-                reject(new Error("No containers tagged with "+ chalk.bold(chalk.white(name)) +" found."));
+                reject(new Error(`No containers tagged with ${chalk.bold(chalk.white(name))} found.`));
             }
         });
     });
