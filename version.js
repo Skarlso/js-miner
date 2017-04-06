@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const config = require('./config.js');
-var Version = function() {};
+const Version = function() {};
 
 Version.prototype.saveServerVersion = function(name, version) {
     let filename = config.configDir + name + '.version';

@@ -6,7 +6,7 @@ const chalk = require('chalk');
 const Spinner = require('cli-spinner').Spinner;
 const ver = require('./version.js');
 const docker = new Docker();
-var DockerHelper = function() {};
+const DockerHelper = function() {};
 
 DockerHelper.prototype.getMinecraftContainer = function(name) {
     var opts = {
