@@ -9,7 +9,7 @@ const AWS = require('aws-sdk');
 const Aws = function () {};
 
 Aws.prototype.s3Upload = function(name) {
-    let filename = name + '_world_archive' + Date.now() + '.zip';
+    let filename = `${name}_world_archive${Date.now()}.zip`;
     let outputFile = config.bindBase + '/' + filename;
     let srcDir = config.bindBase + name;
     let output = fs.createWriteStream(outputFile);
