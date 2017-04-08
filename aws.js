@@ -44,8 +44,9 @@ Aws.prototype.s3Upload = function(name) {
     s3.upload(params, function(err, data) {
         if (err) {
             console.log(chalk.red(err));
+        } else {
+            console.log('Upload done to location:', chalk.green(data.key));
         }
-        console.log('Upload done to location:', chalk.green(data.key));
     });
 };
 
