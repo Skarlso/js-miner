@@ -3,7 +3,7 @@
 var commands = require('commander');
 
 commands
-    .version('0.0.1')
+    .version('1.0.1')
     .command('backup', 'Backs up a world using the provided option to determine the process.')
     .command('start [NAME]', 'Starts a server.')
     .command('stop', 'Stops a server.')
