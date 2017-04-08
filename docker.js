@@ -86,29 +86,21 @@ DockerHelper.prototype.startServer = function(name) {
     let bindDir = config.bindBase + name + ':/data';
     console.log('Server is currently running on version: %s', chalk.bold(chalk.green(version)));
     console.log('Binding to world location: ', chalk.bold(chalk.green(bindDir)));
-    docker.createContainer({
-        Image: 'skarlso/minecraft:' + version,
-        AttachStdin: true,
-        AttachStdout: true,
-        AttachStderr: false,
-        Tty: true,
-        OpenStdin: true,
-        StdinOnce: false,
-        WorkingDir: '/data',
+    console.log('Using mod system:', config.mod);
+    var opts = config.defaultContainer;
+    if (config.mod === 'forge') {
+        Object.assign(opts, {Cmd: ["bash", "-c", `echo \"eula=true\" > eula.txt ; java -jar /minecraft/forge.jar nogui`]});
+    }
+    Object.assign(opts, {
+        Image: "skarlso/minecraft:" + version,
         Labels: {
-            'world':name
-        },
-        'Volumes': {
-            '/data': {}
+            'world': name
         },
         'Hostconfig': {
             'Binds': [config.bindBase + name + ':/data']
-        },
-        Cmd: ["bash", "-c", "echo \"eula=true\" > eula.txt ; java -jar /minecraft/craftbukkit.jar nogui"],
-        HostConfig: {
-            PortBindings: {'25565/tcp': [{ 'HostPort': '25565' }] }
         }
-    }).then((container) => {
+    });
+    docker.createContainer(opts).then((container) => {
         return container.start();
     }).catch((err) => {
         console.log(err);
