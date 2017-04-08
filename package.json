@@ -1,6 +1,6 @@
 {
   "name": "js-miner",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A command line utility to, create, manage, backup minecraft servers using docker.",
   "main": "js-miner.js",
   "scripts": {
