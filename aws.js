@@ -6,7 +6,7 @@ const fs = require('fs');
 const archiver = require('archiver');
 const AWS = require('aws-sdk');
 
-var Aws = function () {};
+const Aws = function () {};
 
 Aws.prototype.s3Upload = function(name) {
     let filename = name + '_world_archive' + Date.now() + '.zip';
