@@ -19,6 +19,23 @@ Aws.prototype.s3Upload = function(name) {
 
     output.on('close', () => {
         console.log('Done zipping world to: ', outputFile);
+        let credentials = new AWS.SharedIniFileCredentials({profile: config.profile});
+        AWS.config.credentials = credentials;
+        AWS.config.update({
+            signatureVersion: 'v4'
+        });
+        let s3 = new AWS.S3();
+        let bucket = config.bucket;
+        console.log("Uploading '%s' to bucket '%s'.", chalk.cyan(name), chalk.green(bucket));
+
+        let params = {Bucket: config.bucket, Key: filename, Body: fs.createReadStream(outputFile)};
+        s3.upload(params, function(err, data) {
+            if (err) {
+                console.log(chalk.red(err));
+            } else {
+                console.log('Upload done to location:', chalk.green(data.Key));
+            }
+        });
     });
 
     archive.on('error', (err) => {
@@ -30,24 +47,6 @@ Aws.prototype.s3Upload = function(name) {
     archive.file(config.bindBase + name + '.version', { name: name + '.version' });
     archive.directory(srcDir + '/');
     archive.finalize();
-
-    let credentials = new AWS.SharedIniFileCredentials({profile: config.profile});
-    AWS.config.credentials = credentials;
-    AWS.config.update({
-        signatureVersion: 'v4'
-    });
-    let s3 = new AWS.S3();
-    let bucket = config.bucket;
-    console.log("Uploading '%s' to bucket '%s'.", chalk.cyan(name), chalk.green(bucket));
-
-    let params = {Bucket: config.bucket, Key: filename, Body: fs.createReadStream(outputFile)};
-    s3.upload(params, function(err, data) {
-        if (err) {
-            console.log(chalk.red(err));
-        } else {
-            console.log('Upload done to location:', chalk.green(data.key));
-        }
-    });
 };
 
 module.exports = new Aws();
