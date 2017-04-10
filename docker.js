@@ -53,17 +53,27 @@ DockerHelper.prototype.setup = function(name, version) {
 // detach from that hijack.
 DockerHelper.prototype.attachToServer = function(name) {
     this.getMinecraftContainer(name).then((container) => {
-        let attach_opts = {stream: true, stdin: true, stdout: true, stderr: true};
-        // var opts = {'Detach': true, 'Tty': true, stream: true, stdin: true, stdout: true, stderr: true};
-        container.attach(attach_opts, (err, stream) => {
-            // stream.pipe(process.stdout);
-            stream.pipe(process.stdout);
-            // // Connect stdin
-            // var isRaw = process.isRaw;
-            // process.stdin.resume();
-            // process.stdin.setRawMode(true);
-            // process.stdin.pipe(stream);
+        console.log(container);
+        exec = require('child_process').exec;
+        exec(`docker attach ${container.id}`, (err, stdout, stderr) => {
+            if (err) {
+                console.error(`exec error: ${err}`);
+                return;
+            }
+            console.log(`stdout: ${stdout}`);
+            console.log(`stderr: ${stderr}`);
         });
+        //let attach_opts = {stream: true, stdin: true, stdout: true, stderr: true};
+        //// var opts = {'Detach': true, 'Tty': true, stream: true, stdin: true, stdout: true, stderr: true};
+        //container.attach(attach_opts, (err, stream) => {
+        //    // stream.pipe(process.stdout);
+        //    stream.pipe(process.stdout);
+        //    // // Connect stdin
+        //    // var isRaw = process.isRaw;
+        //    // process.stdin.resume();
+        //    // process.stdin.setRawMode(true);
+        //    // process.stdin.pipe(stream);
+        //});
     }).catch((err) => {
         console.log(err);
     });

@@ -18,7 +18,17 @@ Thus, it's easy to get a server, which uses mods like the ever famous `/home` te
 
 # Usage
 
+Miner aims to be used as a lightweight server manager. It does that with Docker Containers in order to isolate running servers.
+The containers expose port `25655`. The words are located on the local machine though and mounted into the container via Volumes.
+This is so, that after a world is created, it will remain and `Plugins` or `Modules` can be used with the world. Once it starts
+again the modules will be enabled.
+
+This tool also provides the option to backup a World to a configured S3 bucket. The world is zipped and uploaded using local AWS
+credentials located under the AWS CLI credentials file.
+
 ## Setup
+
+### Configuration Options
 
 ## LifeCycle
 
@@ -35,3 +45,10 @@ To choose Forge mod, run a server like this:
 ```bash
 MINER_MOD=forge js-miner start -n lucky_world
 ```
+
+## Versions
+
+Versions are built by me and hosted under [MineCraft Docker](https://hub.docker.com/r/skarlso/minecraft/). There are only two
+versions currently, but once all the features are working properly, I'll build more. Forge is only provided on 1.11.2 right now.
+
+As new versions will come out, I will update these containers to contain them as well.
