@@ -34,6 +34,18 @@ credentials located under the AWS CLI credentials file.
 
 ## Commands
 
+### Attach
+
+It's possible to attach to a running server if one wants to run some commands like, /op, or /give from the server.
+
+To attach to a running world simply run:
+
+```bash
+js-miner attach -n world_name
+```
+
+You can start typing away your commands to the server.
+
 ## Mods
 
 Both, craftbukkit and forge are supported mods and come with the server pre-configured. For forge, the installed mod goes into the `mod` folder of the world for craftbukkit, it goes into the plugin folder. If the server is started with Forge mods, the mods need to be present on the client side as well.
