@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-var cmd = require('commander');
-var Aws = require('./aws.js');
+var cmd = require('commander')
+var Aws = require('./aws.js')
 
 cmd
   .option('-n, --world-name [WORLD]', 'The name of the world you would like to backup.')
-  .parse(process.argv);
+  .parse(process.argv)
 
-var name = cmd.worldName || 'miner_server';
-Aws.s3Upload(name);
+var name = cmd.worldName || 'miner_server'
+Aws.s3Upload(name)

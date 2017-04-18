@@ -1,15 +1,14 @@
 #!/usr/bin/env node
 
-var cmd = require('commander');
-var chalk = require('chalk');
-var dHelper = require('./docker.js');
-var config = require('./config.js');
+var cmd = require('commander')
+var chalk = require('chalk')
+var dHelper = require('./docker.js')
 
 cmd
   .option('-n, --minecraft-name [SERVER NAME]', 'Name of the server to launch.')
-  .parse(process.argv);
+  .parse(process.argv)
 
-var name = cmd.minecraftName || 'miner_server';
+var name = cmd.minecraftName || 'miner_server'
 
-console.log('Starting %s.', chalk.bold(chalk.white(name)));
-dHelper.startServer(name);
+console.log('Starting %s.', chalk.bold(chalk.white(name)))
+dHelper.startServer(name)

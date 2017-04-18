@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var commands = require('commander');
+var commands = require('commander')
 
 commands
     .version('1.1.1')
@@ -10,4 +10,4 @@ commands
     .command('setup [VERSION]', 'Setup initial container for minecraft with a given version.')
     .command('attach [NAME]', 'Attach to a running minecraft server.')
     .command('versions', 'List available minecraft versions.')
-    .parse(process.argv);
+    .parse(process.argv)
