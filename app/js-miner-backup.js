@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var cmd = require('commander')
-var Aws = require('./aws.js')
+var Aws = require('../utils/aws.js')
 
 cmd
   .option('-n, --world-name [WORLD]', 'The name of the world you would like to backup.')

@@ -5,8 +5,8 @@
 // Create the container with given World Location
 var chalk = require('chalk')
 var cmd = require('commander')
-var dHelper = require('./docker.js')
-var config = require('./config.js')
+var dHelper = require('../utils/docker.js')
+var config = require('../utils/config.js')
 
 cmd
     .option('-m, --minecraft-version [VERSION]', 'Version to use. if not provided, latest is used.')

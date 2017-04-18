@@ -2,7 +2,7 @@
   "name": "js-miner",
   "version": "1.1.1",
   "description": "A command line utility to, create, manage, backup minecraft servers using docker.",
-  "main": "js-miner.js",
+  "main": "app/js-miner.js",
   "scripts": {
     "test": "make test"
   },
@@ -18,7 +18,7 @@
   "author": "Gergely Brautigam",
   "license": "ISC",
   "bin": {
-    "js-miner": "js-miner.js"
+    "js-miner": "app/js-miner.js"
   },
   "bugs": {
     "url": "https://github.com/Skarlso/js-miner/issues"

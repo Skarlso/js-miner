@@ -2,7 +2,7 @@
 
 var cmd = require('commander')
 var chalk = require('chalk')
-var dHelper = require('./docker.js')
+var dHelper = require('../utils/docker.js')
 
 cmd
   .option('-n, --minecraft-name [SERVER NAME]', 'Name of the server to launch.')
