@@ -18,6 +18,20 @@ Thus, it's easy to get a server, which uses mods like the ever famous `/home` te
 
 # Usage
 
+## Install
+
+In order for this to be globally available, run the following:
+
+```bash
+git clone https://github.com/Skarlso/js-miner
+cd js-miner
+npm link
+```
+
+This should install a globally available version of this CLI tool.
+
+## Description
+
 Miner aims to be used as a lightweight server manager. It does that with Docker Containers in order to isolate running servers.
 The containers expose port `25655`. The words are located on the local machine though and mounted into the container via Volumes.
 This is so, that after a world is created, it will remain and `Plugins` or `Modules` can be used with the world. Once it starts
@@ -88,7 +102,7 @@ Once done, you can start the world again and new settings will be available to y
 
 ### Stop
 
-When done using the world, save and stop it by issuing the stop command again: 
+When done using the world, save and stop it by issuing the stop command again:
 
 ```bash
 js-miner stop -n new_world
