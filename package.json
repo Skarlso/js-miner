@@ -33,6 +33,7 @@
     "cli-spinner": "^0.2.6",
     "commander": "^2.9.0",
     "dockerode": "^2.4.2",
-    "mocha": "^3.2.0"
+    "mocha": "^3.2.0",
+    "mock-fs": "^4.4.1"
   }
 }
