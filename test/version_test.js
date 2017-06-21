@@ -25,10 +25,9 @@ describe("Version File Generator", () => {
 
   describe("#saveServerVersion", () => {
     it("saves a given version into a specific file", () => {
-      expect(() => {v.saveServerVersion('non_existing', '1.11.1')}).to.not.throw()
-    })
-    it("throws exception case of an invalid filename", () => {
-      expect(() => {v.saveServerVersion('[]f//.\\', '1.11.1')}).to.throw()
+      return v.saveServerVersion('non_existing', '1.11.1').then((data) => {
+        expect(data).to.equal('1.11.1')
+      })
     })
   })
 })

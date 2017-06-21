@@ -26,7 +26,7 @@
   "homepage": "https://github.com/Skarlso/js-miner#readme",
   "dependencies": {
     "archiver": "^1.3.0",
-    "aws-sdk": "^2.38.0",
+    "aws-sdk": "^2.74.0",
     "aws-sdk-mock": "^1.6.1",
     "chai": "^3.5.0",
     "chalk": "^1.1.3",
