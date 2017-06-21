@@ -28,7 +28,7 @@ describe("Version File Generator", () => {
       expect(() => {v.saveServerVersion('non_existing', '1.11.1')}).to.not.throw()
     })
     it("throws exception case of an invalid filename", () => {
-      // expect(() => {v.saveServerVersion('][;./', '1.11.1')}).to.throw()
+      expect(() => {v.saveServerVersion('[]f//.\\', '1.11.1')}).to.throw()
     })
   })
 })

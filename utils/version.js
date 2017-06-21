@@ -6,7 +6,7 @@ const Version = function () {}
 
 Version.prototype.saveServerVersion = function (name, version) {
   let filename = config.configDir + name + '.version'
-  fs.open(filename, 'wx', (err, fd) => {
+  fs.openSync(filename, 'wx', (err, fd) => {
     if (err) {
       if (err.code === 'EEXIST') {
         console.error(`Server file already exists under ${filename}`)
