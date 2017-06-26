@@ -15,6 +15,7 @@ DockerHelper.prototype.getMinecraftContainer = function (name) {
   }
   return new Promise((resolve, reject) => {
     docker.listContainers(opts, (err, containers) => {
+      console.log('In Promise.')
       if (err) {
         reject(err)
       }

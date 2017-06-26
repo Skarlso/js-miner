@@ -3,7 +3,7 @@ REPORTER = spec
 all: jshint test
 
 test:
-	@NODE_ENV=test ./node_modules/.bin/jest --coverage
+	@NODE_ENV=test ./node_modules/.bin/jest --coverage --verbose --runInBand
 
 tests: test
 
