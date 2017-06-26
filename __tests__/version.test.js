@@ -18,8 +18,10 @@ describe("Version File Generator", () => {
   })
   test('can save version info into a version file', () => {
     expect.assertions(1)
-    return v.saveServerVersion(testName).then(data => {
-      expect(data).toBe('1.11.1')
-    })
+    return expect(v.saveServerVersion(testName, '1.11.1')).resolves.toBe('1.11.1')
+  })
+  test('errors out if fs returns an error value', () => {
+    expect.assertions(1)
+    return expect(v.saveServerVersion('err', '1.11.1')).rejects.toMatch('error')
   })
 })

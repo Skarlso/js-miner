@@ -1,4 +1,5 @@
 const fs = jest.genMockFromModule('fs')
+const path = require('path')
 
 let mockObjects = Object.create(null)
 
@@ -6,12 +7,12 @@ function __setMockFiles(mockFiles) {
   mockObjects = mockFiles
 }
 
-function fileWrite(filename, version, encoding, callback) {
-  if (version != 'err') {
-    return version
-  } else {
-    throw 'error'
+function writeFile(filename, version, encoding, callback) {
+  let err = false
+  if ('err.version' === path.basename(filename)) {
+    err = 'error'
   }
+  callback(err)
 }
 
 function readFileSync(filename, encoding) {
@@ -19,7 +20,7 @@ function readFileSync(filename, encoding) {
 }
 
 fs.__setMockFiles = __setMockFiles
-fs.fileWrite = fileWrite
+fs.writeFile = writeFile
 fs.readFileSync = readFileSync
 
 module.exports = fs
