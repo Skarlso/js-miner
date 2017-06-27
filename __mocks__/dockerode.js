@@ -1,9 +1,13 @@
 const dockerode = jest.genMockFromModule('dockerode')
 
-var Docker = function() {}
 
-Docker.prototype.__setup = function() {
-    console.log('calling the stub')
+var Modem = function() {}
+
+Modem.prototype.followProgress = function(stream, onFinished, onProgress) {
+}
+
+var Docker = function() {
+    this.modem = new Modem()
 }
 
 Docker.prototype.listContainers = function(opts, callback) {
