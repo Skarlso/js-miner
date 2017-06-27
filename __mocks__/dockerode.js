@@ -1,20 +1,26 @@
 const dockerode = jest.genMockFromModule('dockerode')
 
-function listContainers(opts, callback) {
+var Docker = function() {}
+
+Docker.prototype.__setup = function() {
+    console.log('calling the stub')
+}
+
+Docker.prototype.listContainers = function(opts, callback) {
     console.error('Calling mock listContainers.')
     let err = false
     let containers = [{}, {}]
     callback(err, containers)
 }
 
-function pull(tag, callback) {
+Docker.prototype.pull = function(tag, callback) {
     console.log('Calling mock Pull.')
     let err = false
     let stream = Object.create(null)
     callback(err, stream)
 }
 
-function createContainer(opts) {
+Docker.prototype.createContainer = function(opts) {
     console.log('Calling mock createContainer.')
     return new Promise((resolve, reject) => {
         if (opts.err) reject(opts.err)
@@ -22,8 +28,4 @@ function createContainer(opts) {
     })
 }
 
-dockerode.listContainers = listContainers
-dockerode.pull = pull
-dockerode.createContainer = createContainer
-
-module.exports = dockerode
+module.exports = Docker
