@@ -8,7 +8,6 @@ function __setMockFiles(mockFiles) {
 }
 
 function writeFile(filename, version, encoding, callback) {
-  console.log('Using Mock Filesystem.')
   let err = false
   if ('err.version' === path.basename(filename)) {
     err = 'error'

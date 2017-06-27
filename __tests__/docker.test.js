@@ -19,9 +19,10 @@ describe("#getMinecraftContainer", () => {
     expect.assertions(1)
     return expect(dockerHelper.getMinecraftContainer(testName)).resolves.toBe(testName)
   })
-  test('handles failures from dockerode'), () => {
-    Docker.__setup({containers: [{Names: [testName]}]})
+  test('errors when no containers are found', () => {
+    Docker.__setup({containers: []})
+    let err = new Error("No containers tagged with test found.")
     expect.assertions(1)
-    return expect(dockerHelper.getMinecraftContainer(testName)).rejects.toBe('error')
-  }
+    return expect(dockerHelper.getMinecraftContainer(testName)).rejects.toMatchObject(err)
+  })
 })
