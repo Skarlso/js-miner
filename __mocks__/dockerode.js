@@ -11,6 +11,7 @@ function __setup(opt) {
 var Modem = function() {}
 
 Modem.prototype.followProgress = function(stream, onFinished, onProgress) {
+    onFinished()
 }
 
 var Docker = function() {
