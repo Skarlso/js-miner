@@ -2,7 +2,7 @@
 
 ![Logo](./logo.png)
 
-[![NPM](https://nodei.co/npm/js-miner.png)](https://nodei.co/npm/js-miner/)
+[![NPM](https://nodei.co/npm/js-miner.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/js-miner/)
 
 Miner is a CLI utility to manage multiple Minecraft servers with simple commands and Docker Containers to keep them isolated.
 
