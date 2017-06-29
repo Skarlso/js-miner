@@ -9,6 +9,15 @@ function __setup(opt) {
 }
 
 var Modem = function() {}
+var Container = function() {}
+
+Container.prototype.start = function() {
+    console.log('Starting mock container.')
+}
+
+Container.prototype.attach = function() {
+    console.log('Attaching to mock container.')
+}
 
 Modem.prototype.followProgress = function(stream, onFinished, onProgress) {
     onFinished()
@@ -34,8 +43,12 @@ Docker.prototype.pull = function(tag, callback) {
 
 Docker.prototype.createContainer = function(opts) {
     return new Promise((resolve, reject) => {
-        if (this.opts.err) reject(this.opts.err)
-        else resolve(opts.resolve)
+        if (this.opts.err) {
+            reject(this.opts.err)
+        } else {
+            let container = new Container()
+            resolve(container)
+        }
     })
 }
 

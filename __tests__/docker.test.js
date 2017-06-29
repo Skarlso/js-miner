@@ -12,10 +12,6 @@ describe("#setup", () => {
   test('it can setup a new server by pulling a container', () => {
     expect(() => {dockerHelper.setup(testName, '1.11.1')}).not.toThrow()
   })
-  test('saves version of the new container into file', () => {
-    expect(() => {dockerHelper.setup(testName, '1.11.1')}).not.toThrow()
-    expect(v.getServerVersion(testName)).toBe('1.11.1')
-  })
 })
 
 describe("#getMinecraftContainer", () => {
@@ -29,5 +25,11 @@ describe("#getMinecraftContainer", () => {
     let err = new Error("No containers tagged with test found.")
     expect.assertions(1)
     return expect(dockerHelper.getMinecraftContainer(testName)).rejects.toMatchObject(err)
+  })
+})
+
+describe("#startServer", () => {
+  test('can start a server', () => {
+    dockerHelper.startServer(testName)
   })
 })
