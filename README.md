@@ -66,7 +66,7 @@ default one, please set this environment property.
 
 So what is a typical usage cycle for js-miner?
 
-### Setup
+### Setup
 
 You begin by setting up a given version you would like to use. At this stage, both, `forge` and `craftbukkit` are an option.
 Run the following command to pull the required image for your server and setup the `world_name.version` file which contains information
@@ -89,7 +89,7 @@ js-miner start -n new_world
 
 At this point, you have an un-altered, vanilla version of the world with default settings.
 
-#### Own World / Edit options
+#### Own World / Edit options
 
 If you have to edit something, or have your own world you would like to use, or alter some setting, first, stop the world.
 
@@ -102,7 +102,7 @@ and add plugins to the mod/plugin folder like [MineColonies](http://www.minecolo
 
 Once done, you can start the world again and new settings will be available to you.
 
-### Stop
+### Stop
 
 When done using the world, save and stop it by issuing the stop command again:
 

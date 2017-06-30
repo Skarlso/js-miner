@@ -35,20 +35,20 @@ DockerHelper.prototype.setup = function (name, version) {
   spinner.start()
   docker.pull(config.repoTag + version, (err, stream) => {
     if (err) {
-      console.log(`error while pulling image: ${err}`)
+      console.error(`error while pulling image: ${err}`)
       process.exit(1)
     }
     docker.modem.followProgress(stream, onFinished, onProgress)
 
     function onFinished (err, output) {
       spinner.stop(false)
-      if (!err) {
-        console.log('\nDone pulling.')
-        ver.saveServerVersion(name, version)
-      } else {
-        console.log(err)
+      console.log('\nDone pulling.')
+      ver.saveServerVersion(name, version).then((result) => {
+        console.log(`Saved version ${result}`)
+      }).catch((err) => {
+        console.error(`Error while saving version ${err}`)
         process.exit(1)
-      }
+      })
     }
     function onProgress (event) {
     }
@@ -60,10 +60,10 @@ DockerHelper.prototype.attachToServer = function (name) {
     const spawn = require('child_process').spawn
     var child = spawn(`docker`, [`attach`, `${container.id}`], {stdio: 'inherit', detached: true})
     child.on('error', (err) => {
-      console.log('Failed to start child process: ', err)
+      console.error('Failed to start child process: ', err)
     })
   }).catch((err) => {
-    console.log(err)
+    console.error(err)
   })
 }
 
@@ -72,14 +72,14 @@ DockerHelper.prototype.stopServer = function (name) {
     let attachOpts = {stream: true, stdin: true, stdout: true, stderr: true}
     container.attach(attachOpts, (err, stream) => {
       if (err) {
-        console.log(`error while attaching: ${err}`)
+        console.error(`error while attaching: ${err}`)
         process.exit(1)
       }
       stream.pipe(process.stdout)
       stream.write('stop\n')
     })
   }).catch((err) => {
-    console.log(err)
+    console.error(err)
   })
 }
 
@@ -105,7 +105,7 @@ DockerHelper.prototype.startServer = function (name) {
   docker.createContainer(opts).then((container) => {
     return container.start()
   }).catch((err) => {
-    console.log(err)
+    console.error(err)
   })
 }
 
