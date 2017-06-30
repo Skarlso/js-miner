@@ -94,7 +94,7 @@ DockerHelper.prototype.startServer = function (name) {
     Object.assign(opts, {Cmd: ['bash', '-c', `echo "eula=true" > eula.txt ; java -jar /minecraft/forge.jar nogui`]})
   }
   Object.assign(opts, {
-    Image: 'skarlso/minecraft:' + version,
+    Image: config.repoTag + version,
     Labels: {
       'world': name
     },

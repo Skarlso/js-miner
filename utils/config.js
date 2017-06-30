@@ -5,7 +5,7 @@ const os = require('os')
 
 config.bucket = process.env.MINER_BUCKET || 'my-minecraft-backup-bucket'
 config.defaultName = 'miner_server'
-config.repoTag = 'skarlso/minecraft:'
+config.repoTag = process.env.MINE_CON_BASE || 'skarlso/minecraft:'
 const configDir = os.homedir() + '/.miner_world/'
 config.configDir = configDir
 config.bindBase = process.env.MINER_WORLD_BIND_BASE || configDir
@@ -13,7 +13,7 @@ config.profile = process.env.MINER_AWS_PROFILE || 'default'
 // Options for mod are craftbukkit | forge
 config.mod = process.env.MINER_MOD || 'craftbukkit'
 config.defaultContainer = {
-  Image: 'skarlso/minecraft:latest',
+  Image: config.repoTag + 'latest',
   AttachStdin: true,
   AttachStdout: true,
   AttachStderr: false,

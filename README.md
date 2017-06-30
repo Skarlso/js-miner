@@ -54,6 +54,7 @@ config.defaultName = 'miner_server';
 const configDir = os.homedir() + '/.miner_world/';
 config.bindBase = process.env.MINER_WORLD_BIND_BASE || configDir;
 config.profile = process.env.MINER_AWS_PROFILE || 'default';
+config.repoTag = process.env.MINE_CON_BASE || 'skarlso/minecraft:'
 ```
 
 * `MINER_BUCKET` specifies the bucket in which the miner backs up the world
@@ -63,6 +64,7 @@ This one is important to remember, because you are going to have to interact wit
 any given server. This is how worlds/plugins/settings/mods are persisted for servers.
 * `profile` aws is configured using the AWS credential file. If you have a different profile you would like to use with js-miner than the
 default one, please set this environment property.
+* `repoTag` if you don't want wait for me to push new versions up Docker, you can use your Own container. The only requirement is that there is a `/data` folder and a `/minecraft` folder. In `/minecraft` there are two files: `forge.jar`, `craftbukkit.jar` and `minecraft_server.jar`. Although I'm not a 100% sure if that is a requirement by either modding solutions.
 
 ## LifeCycle
 
