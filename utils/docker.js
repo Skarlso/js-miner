@@ -35,7 +35,7 @@ DockerHelper.prototype.setup = function (name, version) {
   spinner.start()
   docker.pull(config.repoTag + version, (err, stream) => {
     if (err) {
-      console.log(`error while pulling image: ${err}`)
+      console.error(`error while pulling image: ${err}`)
       process.exit(1)
     }
     docker.modem.followProgress(stream, onFinished, onProgress)

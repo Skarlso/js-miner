@@ -11,13 +11,16 @@ function __setup(opt) {
 var Modem = function() {}
 var Container = function() {}
 
-Container.prototype.start = function() {
+Container.prototype.start = function(opts, callback) {
     console.log('Starting mock container.')
+    if (callback !== undefined) {
+        callback(false, "data")
+    }
 }
 
 Container.prototype.attach = function(opts, callback) {
     console.log('Attaching to mock container.')
-    callback(err, stream)
+    callback(false, stream)
 }
 
 Modem.prototype.followProgress = function(stream, onFinished, onProgress) {
