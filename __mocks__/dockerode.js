@@ -15,12 +15,13 @@ Container.prototype.start = function() {
     console.log('Starting mock container.')
 }
 
-Container.prototype.attach = function() {
+Container.prototype.attach = function(opts, callback) {
     console.log('Attaching to mock container.')
+    callback(err, stream)
 }
 
 Modem.prototype.followProgress = function(stream, onFinished, onProgress) {
-    onFinished()
+    onFinished(false, false)
 }
 
 var Docker = function() {
@@ -33,7 +34,9 @@ Docker.prototype.listContainers = function(opts, callback) {
 }
 
 Docker.prototype.getContainer = function(name) {
-    return name
+    let container = new Container()
+    container.Names = [name]
+    return container
 }
 
 Docker.prototype.pull = function(tag, callback) {
