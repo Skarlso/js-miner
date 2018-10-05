@@ -1,12 +1,12 @@
 /* jshint esversion: 6 */
 
 const Docker = require('dockerode')
-const config = require('./config.js')
+const config = require('../config/config.js')
 const chalk = require('chalk')
 const Spinner = require('cli-spinner').Spinner
-const ver = require('./version.js')
+const ver = require('../version/version.js')
 const docker = new Docker()
-const DockerHelper = function () {}
+const DockerHelper = function () { }
 
 DockerHelper.prototype.getMinecraftContainer = function (name) {
   var opts = {
@@ -40,7 +40,7 @@ DockerHelper.prototype.setup = function (name, version) {
     }
     docker.modem.followProgress(stream, onFinished, onProgress)
 
-    function onFinished (err, output) {
+    function onFinished(err, output) {
       spinner.stop(false)
       console.log('\nDone pulling.')
       ver.saveServerVersion(name, version).then((result) => {
@@ -50,7 +50,7 @@ DockerHelper.prototype.setup = function (name, version) {
         process.exit(1)
       })
     }
-    function onProgress (event) {
+    function onProgress(event) {
     }
   })
 }
@@ -58,7 +58,7 @@ DockerHelper.prototype.setup = function (name, version) {
 DockerHelper.prototype.attachToServer = function (name) {
   this.getMinecraftContainer(name).then((container) => {
     const spawn = require('child_process').spawn
-    var child = spawn(`docker`, [`attach`, `${container.id}`], {stdio: 'inherit', detached: true})
+    var child = spawn(`docker`, [`attach`, `${container.id}`], { stdio: 'inherit', detached: true })
     child.on('error', (err) => {
       console.error('Failed to start child process: ', err)
     })
@@ -69,7 +69,7 @@ DockerHelper.prototype.attachToServer = function (name) {
 
 DockerHelper.prototype.stopServer = function (name) {
   this.getMinecraftContainer(name).then((container) => {
-    let attachOpts = {stream: true, stdin: true, stdout: true, stderr: true}
+    let attachOpts = { stream: true, stdin: true, stdout: true, stderr: true }
     container.attach(attachOpts, (err, stream) => {
       if (err) {
         console.error(`error while attaching: ${err}`)
@@ -91,7 +91,7 @@ DockerHelper.prototype.startServer = function (name) {
   console.log('Using mod system:', config.mod)
   var opts = config.defaultContainer
   if (config.mod === 'forge') {
-    Object.assign(opts, {Cmd: ['bash', '-c', `echo "eula=true" > eula.txt ; java -jar /minecraft/forge.jar nogui`]})
+    Object.assign(opts, { Cmd: ['bash', '-c', `echo "eula=true" > eula.txt ; java -jar /minecraft/forge.jar nogui`] })
   }
   Object.assign(opts, {
     Image: config.repoTag + version,
@@ -107,6 +107,10 @@ DockerHelper.prototype.startServer = function (name) {
   }).catch((err) => {
     console.error(err)
   })
+}
+
+DockerHelper.prototype.listVersions = function () {
+
 }
 
 module.exports = new DockerHelper()

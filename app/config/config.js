@@ -2,6 +2,16 @@
 
 const config = {}
 const os = require('os')
+const homedir = require('os').homedir();
+
+yaml = require('js-yaml');
+fs = require('fs');
+
+try {
+  var confYaml = yaml.safeLoad(fs.readFileSync(homedir + '/.config/js-miner/config.yml', 'utf8'));
+} catch (e) {
+  console.log(e);
+}
 
 config.bucket = process.env.MINER_BUCKET || 'my-minecraft-backup-bucket'
 config.defaultName = 'miner_server'

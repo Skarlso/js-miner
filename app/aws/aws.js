@@ -1,12 +1,12 @@
 /* jshint esversion: 6 */
 
 const chalk = require('chalk')
-const config = require('./config')
+const config = require('../config/config')
 const fs = require('fs')
 const archiver = require('archiver')
 const AWS = require('aws-sdk')
 
-const Aws = function () {}
+const Aws = function () { }
 
 Aws.prototype.s3Upload = function (name) {
   let filename = `${name}_world_archive${Date.now()}.zip`
@@ -21,9 +21,9 @@ Aws.prototype.s3Upload = function (name) {
 
   output.on('close', () => {
     console.log('Done zipping world to: ', outputFile)
-    let credentials = new AWS.SharedIniFileCredentials({profile: config.profile})
+    let credentials = new AWS.SharedIniFileCredentials({ profile: config.profile })
     AWS.config.credentials = credentials
-    AWS.config.update({signatureVersion: 'v4'})
+    AWS.config.update({ signatureVersion: 'v4' })
     let s3 = new AWS.S3()
     let bucket = config.bucket
     console.log("Uploading '%s' to bucket '%s'.", chalk.cyan(name), chalk.green(bucket))

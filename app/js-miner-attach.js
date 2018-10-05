@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 var cmd = require('commander')
-var dHelper = require('../utils/docker.js')
-var config = require('../utils/config.js')
+var dHelper = require('./docker/docker.js')
+var config = require('./config/config.js')
 
 cmd
   .option('-n, --minecraft-name [SERVER NAME]', 'Name of the server to attach to.')
