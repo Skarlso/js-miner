@@ -33,7 +33,7 @@ DockerHelper.prototype.setup = function (name, version) {
   var spinner = new Spinner('Pulling minecraft image... %s')
   spinner.setSpinnerString('|/-\\')
   spinner.start()
-  docker.pull(config.repoTag + version, (err, stream) => {
+  docker.pull(config.repoTag + ':' + version, (err, stream) => {
     if (err) {
       console.error(`error while pulling image: ${err}`)
       process.exit(1)
@@ -83,18 +83,18 @@ DockerHelper.prototype.stopServer = function (name) {
   })
 }
 
-DockerHelper.prototype.startServer = function (name) {
+DockerHelper.prototype.startServer = function (name, mod = 'craftbukkit') {
   let version = ver.getServerVersion(name)
   let bindDir = config.bindBase + name + ':/data'
   console.log('Server is currently running on version: %s', chalk.bold(chalk.green(version)))
   console.log('Binding to world location: ', chalk.bold(chalk.green(bindDir)))
-  console.log('Using mod system:', config.mod)
+  console.log('Using mod system:', mod)
   var opts = config.defaultContainer
-  if (config.mod === 'forge') {
+  if (mod === 'forge') {
     Object.assign(opts, { Cmd: ['bash', '-c', `echo "eula=true" > eula.txt ; java -jar /minecraft/forge.jar nogui`] })
   }
   Object.assign(opts, {
-    Image: config.repoTag + version,
+    Image: config.repoTag + ':' + version,
     Labels: {
       'world': name
     },

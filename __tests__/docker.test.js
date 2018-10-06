@@ -32,6 +32,10 @@ describe("#startServer", () => {
     Docker.__setup({ containers: [{ Names: [testName] }] })
     expect(() => { dockerHelper.startServer(testName) }).not.toThrow()
   })
+  test('can start a forge server', () => {
+    Docker.__setup({ containers: [{ Names: [testName] }] })
+    expect(() => { dockerHelper.startServer(testName, 'forge') }).not.toThrow()
+  })
   test('can not start a not setup server', () => {
     Docker.__setup({ err: new Error('No version found for server.') })
     // global.console = { error: jest.fn(), log: jest.fn(), warn: jest.fn()}
