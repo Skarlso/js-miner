@@ -1,8 +1,8 @@
 /* jshint esversion: 6 */
 
 var fs = require("fs")
-const config = require('./config.js')
-const Version = function () {}
+const config = require('../config/config.js')
+const Version = function () { }
 
 Version.prototype.saveServerVersion = function (name, version) {
   let filename = config.configDir + name + '.version'

@@ -2,16 +2,25 @@
 
 const config = {}
 const os = require('os')
+const homedir = os.homedir();
+const configDir = homedir + '/.miner_world/'
+const yaml = require('js-yaml');
+const fs = require('fs');
 
-config.bucket = process.env.MINER_BUCKET || 'my-minecraft-backup-bucket'
-config.defaultName = 'miner_server'
-config.repoTag = process.env.MINE_CON_BASE || 'skarlso/minecraft:'
-const configDir = os.homedir() + '/.miner_world/'
+try {
+  var configYaml = yaml.safeLoad(fs.readFileSync(homedir + '/.config/js-miner/config.yaml', 'utf8'));
+} catch (e) {
+  console.log(`file ${homedir}/.config/js-miner/config.yaml not found. please create it.`)
+  process.exit(1)
+}
+
+config.bucket = configYaml.bucket || 'my-minecraft-backup-bucket'
+config.defaultName = configYaml.name || 'miner_server'
+config.repoTag = configYaml.repoTag || 'skarlso/minecraft'
 config.configDir = configDir
-config.bindBase = process.env.MINER_WORLD_BIND_BASE || configDir
-config.profile = process.env.MINER_AWS_PROFILE || 'default'
+config.bindBase = configYaml.bindBase || configDir
+config.profile = configYaml.awsProfile || 'default'
 // Options for mod are craftbukkit | forge
-config.mod = process.env.MINER_MOD || 'craftbukkit'
 config.defaultContainer = {
   Image: config.repoTag + 'latest',
   AttachStdin: true,

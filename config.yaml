@@ -1,0 +1,5 @@
+bucket: my-minecraft-backup-bucket
+name: miner_server
+repoTag: skarlso/minecraft
+bindBase: default
+awsProfile: default

@@ -1,12 +1,12 @@
 /* jshint esversion: 6 */
 
 const Docker = require('dockerode')
-const config = require('./config.js')
+const config = require('../config/config.js')
 const chalk = require('chalk')
 const Spinner = require('cli-spinner').Spinner
-const ver = require('./version.js')
+const ver = require('../version/version.js')
 const docker = new Docker()
-const DockerHelper = function () {}
+const DockerHelper = function () { }
 
 DockerHelper.prototype.getMinecraftContainer = function (name) {
   var opts = {
@@ -33,14 +33,14 @@ DockerHelper.prototype.setup = function (name, version) {
   var spinner = new Spinner('Pulling minecraft image... %s')
   spinner.setSpinnerString('|/-\\')
   spinner.start()
-  docker.pull(config.repoTag + version, (err, stream) => {
+  docker.pull(config.repoTag + ':' + version, (err, stream) => {
     if (err) {
       console.error(`error while pulling image: ${err}`)
       process.exit(1)
     }
     docker.modem.followProgress(stream, onFinished, onProgress)
 
-    function onFinished (err, output) {
+    function onFinished(err, output) {
       spinner.stop(false)
       console.log('\nDone pulling.')
       ver.saveServerVersion(name, version).then((result) => {
@@ -50,7 +50,7 @@ DockerHelper.prototype.setup = function (name, version) {
         process.exit(1)
       })
     }
-    function onProgress (event) {
+    function onProgress(event) {
     }
   })
 }
@@ -58,7 +58,7 @@ DockerHelper.prototype.setup = function (name, version) {
 DockerHelper.prototype.attachToServer = function (name) {
   this.getMinecraftContainer(name).then((container) => {
     const spawn = require('child_process').spawn
-    var child = spawn(`docker`, [`attach`, `${container.id}`], {stdio: 'inherit', detached: true})
+    var child = spawn(`docker`, [`attach`, `${container.id}`], { stdio: 'inherit', detached: true })
     child.on('error', (err) => {
       console.error('Failed to start child process: ', err)
     })
@@ -69,7 +69,7 @@ DockerHelper.prototype.attachToServer = function (name) {
 
 DockerHelper.prototype.stopServer = function (name) {
   this.getMinecraftContainer(name).then((container) => {
-    let attachOpts = {stream: true, stdin: true, stdout: true, stderr: true}
+    let attachOpts = { stream: true, stdin: true, stdout: true, stderr: true }
     container.attach(attachOpts, (err, stream) => {
       if (err) {
         console.error(`error while attaching: ${err}`)
@@ -83,18 +83,18 @@ DockerHelper.prototype.stopServer = function (name) {
   })
 }
 
-DockerHelper.prototype.startServer = function (name) {
+DockerHelper.prototype.startServer = function (name, mod = 'craftbukkit') {
   let version = ver.getServerVersion(name)
   let bindDir = config.bindBase + name + ':/data'
   console.log('Server is currently running on version: %s', chalk.bold(chalk.green(version)))
   console.log('Binding to world location: ', chalk.bold(chalk.green(bindDir)))
-  console.log('Using mod system:', config.mod)
+  console.log('Using mod system:', mod)
   var opts = config.defaultContainer
-  if (config.mod === 'forge') {
-    Object.assign(opts, {Cmd: ['bash', '-c', `echo "eula=true" > eula.txt ; java -jar /minecraft/forge.jar nogui`]})
+  if (mod === 'forge') {
+    Object.assign(opts, { Cmd: ['bash', '-c', `echo "eula=true" > eula.txt ; java -jar /minecraft/forge.jar nogui`] })
   }
   Object.assign(opts, {
-    Image: config.repoTag + version,
+    Image: config.repoTag + ':' + version,
     Labels: {
       'world': name
     },
@@ -107,6 +107,10 @@ DockerHelper.prototype.startServer = function (name) {
   }).catch((err) => {
     console.error(err)
   })
+}
+
+DockerHelper.prototype.listVersions = function () {
+  console.log(`Listing versions for base: ${chalk.bold(chalk.green(config.repoTag))}.`)
 }
 
 module.exports = new DockerHelper()

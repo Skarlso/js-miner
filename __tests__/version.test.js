@@ -1,7 +1,7 @@
 jest.mock('fs')
 
-const v = require('../utils/version.js');
-const config = require('../utils/config.js')
+const v = require('../app/version/version.js');
+const config = require('../app/config/config.js')
 const testName = 'test_container'
 const fs = require('fs')
 
