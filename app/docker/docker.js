@@ -110,7 +110,7 @@ DockerHelper.prototype.startServer = function (name, mod = 'craftbukkit') {
 }
 
 DockerHelper.prototype.listVersions = function () {
-
+  console.log(`Listing versions for base: ${chalk.bold(chalk.green(config.repoTag))}.`)
 }
 
 module.exports = new DockerHelper()

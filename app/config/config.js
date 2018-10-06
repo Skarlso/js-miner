@@ -8,16 +8,11 @@ const yaml = require('js-yaml');
 const fs = require('fs');
 
 try {
-  var configYaml = yaml.safeLoad(fs.readFileSync(homedir + '/.config/js-miner/config.yml', 'utf8'));
+  var configYaml = yaml.safeLoad(fs.readFileSync(homedir + '/.config/js-miner/config.yaml', 'utf8'));
 } catch (e) {
-  console.log(e);
+  console.log(`file ${homedir}/.config/js-miner/config.yaml not found. please create it.`)
+  process.exit(1)
 }
-
-// bucket: my-minecraft-backup-bucket
-// name: miner_server
-// repoTag: skarlso/minecraft
-// bindBase: ~/.miner_world/
-// awsProfile: default
 
 config.bucket = configYaml.bucket || 'my-minecraft-backup-bucket'
 config.defaultName = configYaml.name || 'miner_server'
