@@ -3,23 +3,43 @@
 const config = {}
 const os = require('os')
 const homedir = os.homedir();
-const configDir = homedir + '/.miner_world/'
+const path = require('path');
+const configDir = path.join(homedir, '.miner_world')
 const yaml = require('js-yaml');
 const fs = require('fs');
 
+let configYaml = {}
+
 try {
-  var configYaml = yaml.safeLoad(fs.readFileSync(homedir + '/.config/js-miner/config.yaml', 'utf8'));
+  configYaml = yaml.safeLoad(fs.readFileSync(path.join(configDir, 'config.yaml'), 'utf8'))
 } catch (e) {
-  console.log(`file ${homedir}/.config/js-miner/config.yaml not found. please create it.`)
-  process.exit(1)
+  console.log(`file ${configDir}/config.yaml not found. first time run creating it...`)
+  if (!fs.existsSync(configDir)) {
+    fs.mkdirSync(configDir)
+  }
+  console.log('config dir created. creating config file.')
+  configYaml.bucket = process.env.MINER_BUCKET || 'my-minecraft-backup-bucket';
+  configYaml.defaultName = 'miner_server';
+  configYaml.bindBase = process.env.MINER_WORLD_BIND_BASE || configDir;
+  configYaml.profile = process.env.MINER_AWS_PROFILE || 'default';
+  configYaml.repoTag = process.env.MINE_CON_BASE || 'skarlso/minecraft'
+  let content = `
+bucket: my-minecraft-backup-bucket
+name: miner_server
+repoTag: skarlso/minecraft
+bindBase: miner_world
+awsProfile: default
+  `
+  fs.writeFileSync(path.join(configDir, 'config.yaml'), content)
 }
 
-config.bucket = configYaml.bucket || 'my-minecraft-backup-bucket'
-config.defaultName = configYaml.name || 'miner_server'
-config.repoTag = configYaml.repoTag || 'skarlso/minecraft'
+config.bucket = configYaml.bucket
+config.defaultName = configYaml.name
+config.repoTag = configYaml.repoTag
 config.configDir = configDir
-config.bindBase = configYaml.bindBase || configDir
-config.profile = configYaml.awsProfile || 'default'
+config.bindBase = configYaml.bindBase
+config.profile = configYaml.awsProfile
+
 // Options for mod are craftbukkit | forge
 config.defaultContainer = {
   Image: config.repoTag + 'latest',

@@ -4,9 +4,10 @@ const v = require('../app/version/version.js');
 const config = require('../app/config/config.js')
 const testName = 'test_container'
 const fs = require('fs')
+const path = require('path');
 
 describe("Version File Generator", () => {
-  let filename = config.configDir + testName + '.version'
+  let filename = path.join(config.configDir, testName + '.version')
   const MOCK_FILE_INFO = {}
   MOCK_FILE_INFO[filename] = '1.11.1'
   MOCK_FILE_INFO.err = null
